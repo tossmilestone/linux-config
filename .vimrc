@@ -87,7 +87,10 @@ Bundle 'matchit.zip'
 Bundle 'Wombat'
 " Yank history navigation
 Bundle 'YankRing.vim'
-
+" Buffer Exlporer
+Bundle 'bufexplorer.zip'
+" C VIM
+Bundle 'c.vim'
 " Installing plugins the first time
 if iCanHazVundle == 0
     echo "Installing Bundles, please ignore key map error messages"
@@ -106,9 +109,9 @@ set softtabstop=4
 set shiftwidth=4
 
 " tablength exceptions
-autocmd FileType html setlocal shiftwidth=2 tabstop=2
-autocmd FileType htmldjango setlocal shiftwidth=2 tabstop=2
-autocmd FileType javascript setlocal shiftwidth=2 tabstop=2
+" autocmd FileType html setlocal shiftwidth=2 tabstop=2
+" autocmd FileType htmldjango setlocal shiftwidth=2 tabstop=2
+" autocmd FileType javascript setlocal shiftwidth=2 tabstop=2
 
 " always show status bar
 set ls=2
@@ -201,14 +204,14 @@ let OmniCpp_MayCompleteScope = 0
 let OmniCpp_SelectFirstItem = 0
 
 " debugger keyboard shortcuts
-map <F5> :Dbg over<CR>
-map <F6> :Dbg into<CR>
-map <F7> :Dbg out<CR>
-map <F8> :Dbg here<CR>
-map <F9> :Dbg break<CR>
-map <F10> :Dbg watch<CR>
-map <F11> :Dbg down<CR>
-map <F12> :Dbg up<CR>
+"map <F5> :Dbg over<CR>
+"map <F6> :Dbg into<CR>
+"map <F7> :Dbg out<CR>
+"map <F8> :Dbg here<CR>
+"map <F9> :Dbg break<CR>
+"map <F10> :Dbg watch<CR>
+"map <F11> :Dbg down<CR>
+"map <F12> :Dbg up<CR>
 
 " CtrlP (new fuzzy finder)
 let g:ctrlp_map = ',e'
@@ -262,7 +265,7 @@ let g:pymode_lint_signs = 0
 " don't fold python code on open
 let g:pymode_folding = 0
 " don't load rope by default. Change to 1 to use rope
-let g:pymode_rope = 0
+let g:pymode_rope = 1
 
 " rope (from python-mode) settings
 nmap ,d :RopeGotoDefinition<CR>
@@ -278,7 +281,7 @@ let g:tabman_focus  = 'tf'
 
 " use 256 colors when possible
 if &term =~? 'mlterm\|xterm\|xterm-256\|screen-256'
-  let &t_Co = 256
+	let &t_Co = 256
     " color
     colorscheme fisa
 else
@@ -303,4 +306,23 @@ let g:AutoClosePumvisible = {"ENTER": "\<C-Y>", "ESC": "\<ESC>"}
 
 " to use fancy symbols for powerline, uncomment the following line and use a
 " patched font (more info on the README.rst)
-" let g:Powerline_symbols = 'fancy'
+let g:Powerline_symbols = 'fancy'
+
+" 设置新文件的编码为 UTF-8
+set fileencoding=utf8
+"  
+" 自动判断编码时，依次尝试以下编码：
+set fileencodings=ucs-bom,utf-8,gb18030,default
+
+" Buffers - explore/next/previous: Alt-F12, F12, Shift-F12.
+nnoremap <silent> <M-F12> :BufExplorer<CR>
+nnoremap <silent> <F12> :bn<CR>
+nnoremap <silent> <S-F12> :bp<CR>
+
+if has("autocmd")
+au InsertEnter * silent execute "!gconftool-2 --type string --set /apps/gnome-terminal/profiles/Default/cursor_shape ibeam"
+au InsertLeave * silent execute "!gconftool-2 --type string --set /apps/gnome-terminal/profiles/Default/cursor_shape block"
+au VimLeave * silent execute "!gconftool-2 --type string --set /apps/gnome-terminal/profiles/Default/cursor_shape block"
+endif
+" CTags update
+map <C-F12> :!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q .<CR>
