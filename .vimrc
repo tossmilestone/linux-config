@@ -72,7 +72,8 @@ Bundle 'airblade/vim-gitgutter'
 " numbering every time you go to normal mode. Author refuses to add a setting 
 " to avoid that)
 " Bundle 'myusuf3/numbers.vim'
-
+"  OmniCppComplete
+Bundle 'vim-scripts/OmniCppComplete'
 " Bundles from vim-scripts repos
 
 " Autocompletion
@@ -91,6 +92,9 @@ Bundle 'YankRing.vim'
 Bundle 'bufexplorer.zip'
 " C VIM
 Bundle 'c.vim'
+" Indent Line
+Bundle 'indentLine.vim'
+
 " Installing plugins the first time
 if iCanHazVundle == 0
     echo "Installing Bundles, please ignore key map error messages"
@@ -111,7 +115,7 @@ set shiftwidth=4
 " tablength exceptions
 " autocmd FileType html setlocal shiftwidth=2 tabstop=2
 " autocmd FileType htmldjango setlocal shiftwidth=2 tabstop=2
-" autocmd FileType javascript setlocal shiftwidth=2 tabstop=2
+autocmd FileType automake setlocal expandtab 
 
 " always show status bar
 set ls=2
@@ -196,8 +200,8 @@ let OmniCpp_ShowAccess = 1
 " namespaces that are always used in your project.
 let OmniCpp_DefaultNamespaces = ["std"]
 " Complete Behaviour
-let OmniCpp_MayCompleteDot = 0
-let OmniCpp_MayCompleteArrow = 0
+let OmniCpp_MayCompleteDot = 1
+let OmniCpp_MayCompleteArrow = 1
 let OmniCpp_MayCompleteScope = 0
 " When 'completeopt' does not contain "longest", Vim automatically select the first entry of the popup menu. You can
 " change this behaviour with the OmniCpp_SelectFirstItem option.
@@ -238,7 +242,7 @@ let g:ctrlp_working_path_mode = 0
 " Ignore files on fuzzy finder
 let g:ctrlp_custom_ignore = {
   \ 'dir':  '\v[\/](\.git|\.hg|\.svn)$',
-  \ 'file': '\.pyc$\|\.pyo$',
+  \ 'file': '\.pyc$\|\.pyo$|\.o$',
   \ }
 
 " Ignore files on NERDTree
@@ -309,7 +313,7 @@ let g:AutoClosePumvisible = {"ENTER": "\<C-Y>", "ESC": "\<ESC>"}
 let g:Powerline_symbols = 'fancy'
 
 " 设置新文件的编码为 UTF-8
-set fileencoding=utf8
+set fileencoding=utf-8
 "  
 " 自动判断编码时，依次尝试以下编码：
 set fileencodings=ucs-bom,utf-8,gb18030,default
@@ -319,6 +323,11 @@ nnoremap <silent> <M-F12> :BufExplorer<CR>
 nnoremap <silent> <F12> :bn<CR>
 nnoremap <silent> <S-F12> :bp<CR>
 
+" Buffers quick search
+set wildchar=<Tab> wildmenu wildmode=full
+set wildcharm=<C-Z>
+nnoremap <F10> :b <C-Z>
+
 if has("autocmd")
 au InsertEnter * silent execute "!gconftool-2 --type string --set /apps/gnome-terminal/profiles/Default/cursor_shape ibeam"
 au InsertLeave * silent execute "!gconftool-2 --type string --set /apps/gnome-terminal/profiles/Default/cursor_shape block"
@@ -326,3 +335,16 @@ au VimLeave * silent execute "!gconftool-2 --type string --set /apps/gnome-termi
 endif
 " CTags update
 map <C-F12> :!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q .<CR>
+imap <C-F12> <ESC>:!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q .<CR>
+set tags+=~/.vim/systags
+
+" Mousable
+if has('mouse')
+    set mouse=a
+endif
+
+" Set indentLine
+let g:indentLine_color_term = 239
+
+set listchars=tab:>-,trail:-
+set list
