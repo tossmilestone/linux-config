@@ -94,6 +94,8 @@ Bundle 'bufexplorer.zip'
 Bundle 'c.vim'
 " Indent Line
 Bundle 'indentLine.vim'
+" Tabular
+Bundle 'godlygeek/tabular'
 
 " Installing plugins the first time
 if iCanHazVundle == 0
