@@ -25,7 +25,7 @@ Bundle 'gmarik/vundle'
 " Bundles from GitHub repos:
 
 " Python and PHP Debugger
-Bundle 'fisadev/vim-debug.vim'
+"Bundle 'fisadev/vim-debug.vim'
 " Better file browser
 Bundle 'scrooloose/nerdtree'
 " Code commenter
@@ -40,10 +40,12 @@ Bundle 'fisadev/vim-ctrlp-cmdpalette'
 Bundle 'mattn/zencoding-vim'
 " Git integration
 Bundle 'motemen/git-vim'
+" Git branch status
+Bundle 'tpope/vim-fugitive'
 " Tab list panel
 Bundle 'kien/tabman.vim'
 " Powerline
-Bundle 'Lokaltog/vim-powerline'
+" Bundle 'Lokaltog/vim-powerline'
 " Terminal Vim with 256 colors colorscheme
 Bundle 'fisadev/fisa-vim-colorscheme'
 " Consoles as buffers
@@ -68,8 +70,8 @@ Bundle 'garbas/vim-snipmate'
 Bundle 'airblade/vim-gitgutter'
 " Relative numbering of lines (0 is the current line)
 " (disabled by default because is very intrusive and can't be easily toggled
-" on/off. When the plugin is present, will always activate the relative 
-" numbering every time you go to normal mode. Author refuses to add a setting 
+" on/off. When the plugin is present, will always activate the relative
+" numbering every time you go to normal mode. Author refuses to add a setting
 " to avoid that)
 " Bundle 'myusuf3/numbers.vim'
 "  OmniCppComplete
@@ -89,13 +91,30 @@ Bundle 'Wombat'
 " Yank history navigation
 Bundle 'YankRing.vim'
 " Buffer Exlporer
-Bundle 'bufexplorer.zip'
-" C VIM
+" Bundle 'bufexplorer.zip'
+" C VIM'
 Bundle 'c.vim'
 " Indent Line
 Bundle 'indentLine.vim'
 " Tabular
 Bundle 'godlygeek/tabular'
+" Vim misc, needed by vim-session
+Bundle 'xolox/vim-misc'
+" Vim session
+Bundle 'xolox/vim-session'
+" Nerdtree tabs
+Bundle 'jistr/vim-nerdtree-tabs'
+" Ack
+Bundle 'mileszs/ack.vim'
+" Nerdack
+Bundle 'tyok/nerdtree-ack'
+" minibufexplore
+Bundle "fholgado/minibufexpl.vim"
+" vim-airline
+Bundle "bling/vim-airline"
+" mark-signature
+Bundle "kshenoy/vim-signature"
+
 
 " Installing plugins the first time
 if iCanHazVundle == 0
@@ -117,7 +136,7 @@ set shiftwidth=4
 " tablength exceptions
 " autocmd FileType html setlocal shiftwidth=2 tabstop=2
 " autocmd FileType htmldjango setlocal shiftwidth=2 tabstop=2
-autocmd FileType automake setlocal expandtab 
+autocmd FileType automake setlocal expandtab
 
 " always show status bar
 set ls=2
@@ -136,14 +155,14 @@ map <F4> :TagbarToggle<CR>
 " autofocus on Tagbar open
 let g:tagbar_autofocus = 1
 
-" NERDTree (better file browser) toggle
+" NERDTree toggle
 map <F3> :NERDTreeToggle<CR>
 
 " tab navigation
 map tn :tabn<CR>
 map tp :tabp<CR>
-map tm :tabm 
-map tt :tabnew 
+map tm :tabm
+map tt :tabnew
 map ts :tab split<CR>
 map <C-S-Right> :tabn<CR>
 imap <C-S-Right> <ESC>:tabn<CR>
@@ -159,6 +178,11 @@ imap <M-Right> <ESC><c-w>l
 imap <M-Left> <ESC><c-w>h
 imap <M-Up> <ESC><c-w>k
 imap <M-Down> <ESC><c-w>j
+
+noremap <C-L> <c-w>l
+noremap <C-H> <c-w>h
+noremap <C-K> <c-w>k
+noremap <C-J> <c-w>j
 
 " automatically close autocompletion window
 autocmd CursorMovedI * if pumvisible() == 0|pclose|endif
@@ -208,7 +232,7 @@ let OmniCpp_MayCompleteScope = 0
 " When 'completeopt' does not contain "longest", Vim automatically select the first entry of the popup menu. You can
 " change this behaviour with the OmniCpp_SelectFirstItem option.
 let OmniCpp_SelectFirstItem = 0
-
+set completeopt-=preview
 " debugger keyboard shortcuts
 "map <F5> :Dbg over<CR>
 "map <F6> :Dbg into<CR>
@@ -226,6 +250,7 @@ nmap ,G :CtrlPBufTagAll<CR>
 nmap ,f :CtrlPLine<CR>
 nmap ,m :CtrlPMRUFiles<CR>
 nmap ,c :CtrlPCmdPalette<CR>
+nmap ,b :CtrlPBuffer<CR>
 " to be able to call CtrlP with default search text
 function! CtrlPWithSearchText(search_text, ctrlp_command_end)
     execute ':CtrlP' . a:ctrlp_command_end
@@ -244,17 +269,17 @@ let g:ctrlp_working_path_mode = 0
 " Ignore files on fuzzy finder
 let g:ctrlp_custom_ignore = {
   \ 'dir':  '\v[\/](\.git|\.hg|\.svn)$',
-  \ 'file': '\.pyc$\|\.pyo$|\.o$',
+  \ 'file': '\.pyc$\|\.pyo$|\.o|\.a$',
   \ }
 
 " Ignore files on NERDTree
-let NERDTreeIgnore = ['\.pyc$', '\.pyo$']
+let NERDTreeIgnore = ['\.pyc$', '\.pyo$', '\.o', '\.a', '\.la', '\.lo']
 
 " simple recursive grep
 command! -nargs=1 RecurGrep lvimgrep /<args>/gj ./**/*.* | lopen | set nowrap
 command! -nargs=1 RecurGrepFast silent exec 'lgrep! <q-args> ./**/*.*' | lopen
-nmap ,R :RecurGrep 
-nmap ,r :RecurGrepFast 
+nmap ,R :RecurGrep
+nmap ,r :RecurGrepFast
 nmap ,wR :RecurGrep <cword><CR>
 nmap ,wr :RecurGrepFast <cword><CR>
 
@@ -287,7 +312,7 @@ let g:tabman_focus  = 'tf'
 
 " use 256 colors when possible
 if &term =~? 'mlterm\|xterm\|xterm-256\|screen-256'
-	let &t_Co = 256
+    let &t_Co = 256
     " color
     colorscheme fisa
 else
@@ -312,18 +337,36 @@ let g:AutoClosePumvisible = {"ENTER": "\<C-Y>", "ESC": "\<ESC>"}
 
 " to use fancy symbols for powerline, uncomment the following line and use a
 " patched font (more info on the README.rst)
-let g:Powerline_symbols = 'fancy'
+"let g:Powerline_symbols = 'fancy'
+let g:airline_powerline_fonts = 1
+let g:airline_enable_branch = 1
+
+" Powerline symbols for vim-airline
+if !exists('g:airline_symbols')
+    let g:airline_symbols = {}
+endif
+let g:airline_left_sep = '⮀'
+let g:airline_left_alt_sep = '⮁'
+let g:airline_right_sep = '⮂'
+let g:airline_right_alt_sep = '⮃'
+let g:airline_symbols.branch = '⭠'
+let g:airline_symbols.readonly = '⭤'
+let g:airline_symbols.linenr = '⭡'
 
 " 设置新文件的编码为 UTF-8
 set fileencoding=utf-8
-"  
+"
 " 自动判断编码时，依次尝试以下编码：
 set fileencodings=ucs-bom,utf-8,gb18030,default
 
 " Buffers - explore/next/previous: Alt-F12, F12, Shift-F12.
-nnoremap <silent> <M-F12> :BufExplorer<CR>
-nnoremap <silent> <F12> :bn<CR>
-nnoremap <silent> <S-F12> :bp<CR>
+"nnoremap <silent> <M-F12> :BufExplorer<CR>
+"nnoremap <silent> <F12> :bn<CR>
+"nnoremap <silent> <S-F12> :bp<CR>
+
+" Buffers navigation
+noremap <C-Tab>   :MBEbn<CR>
+noremap <C-S-Tab> :MBEbp<CR>
 
 " Buffers quick search
 set wildchar=<Tab> wildmenu wildmode=full
@@ -331,9 +374,9 @@ set wildcharm=<C-Z>
 nnoremap <F10> :b <C-Z>
 
 if has("autocmd")
-au InsertEnter * silent execute "!gconftool-2 --type string --set /apps/gnome-terminal/profiles/Default/cursor_shape ibeam"
-au InsertLeave * silent execute "!gconftool-2 --type string --set /apps/gnome-terminal/profiles/Default/cursor_shape block"
-au VimLeave * silent execute "!gconftool-2 --type string --set /apps/gnome-terminal/profiles/Default/cursor_shape block"
+    au InsertEnter * silent execute "!gconftool-2 --type string --set /apps/gnome-terminal/profiles/Default/cursor_shape ibeam"
+    au InsertLeave * silent execute "!gconftool-2 --type string --set /apps/gnome-terminal/profiles/Default/cursor_shape block"
+    au VimLeave * silent execute "!gconftool-2 --type string --set /apps/gnome-terminal/profiles/Default/cursor_shape block"
 endif
 " CTags update
 map <C-F12> :!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q .<CR>
@@ -348,5 +391,19 @@ endif
 " Set indentLine
 let g:indentLine_color_term = 239
 
+let g:C_FormatDate = '%Y.%m.%d'
+
 set listchars=tab:>-,trail:-
 set list
+
+" Set clipboard not override when delete
+xnoremap p pgvy
+
+" Set fold
+"set fdm=syntax
+
+" Session
+let g:session_autosave = 'no'
+
+" minibufexpl
+nnoremap <silent> <F12> :MBEToggle<CR>
