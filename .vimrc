@@ -79,7 +79,7 @@ Bundle 'vim-scripts/OmniCppComplete'
 " Bundles from vim-scripts repos
 
 " Autocompletion
-Bundle 'AutoComplPop'
+"Bundle 'AutoComplPop'
 " Python code checker
 Bundle 'pyflakes.vim'
 " Search results counter
@@ -109,12 +109,19 @@ Bundle 'mileszs/ack.vim'
 " Nerdack
 Bundle 'tyok/nerdtree-ack'
 " minibufexplore
-Bundle "fholgado/minibufexpl.vim"
+" Bundle "fholgado/minibufexpl.vim"
 " vim-airline
 Bundle "bling/vim-airline"
 " mark-signature
 Bundle "kshenoy/vim-signature"
-
+" highlight tags
+Bundle "vim-scripts/TagHighlight"
+" window chooser
+Bundle "t9md/vim-choosewin"
+" YouCompleteMe
+Bundle "Valloric/YouCompleteMe"
+Bundle "Valloric/ListToggle"
+Bundle "scrooloose/syntastic"
 
 " Installing plugins the first time
 if iCanHazVundle == 0
@@ -150,6 +157,10 @@ set hlsearch
 " line numbers
 set nu
 
+" map leader to ,
+let mapleader = ";"
+let g:mapleader = ";"
+
 " toggle Tagbar display
 map <F4> :TagbarToggle<CR>
 " autofocus on Tagbar open
@@ -164,10 +175,11 @@ map tp :tabp<CR>
 map tm :tabm
 map tt :tabnew
 map ts :tab split<CR>
-map <C-S-Right> :tabn<CR>
-imap <C-S-Right> <ESC>:tabn<CR>
-map <C-S-Left> :tabp<CR>
-imap <C-S-Left> <ESC>:tabp<CR>
+" buffer navigation
+map <C-S-Right> :bn<CR>
+imap <C-S-Right> <ESC>:bn<CR>
+map <C-S-Left> :bp<CR>
+imap <C-S-Left> <ESC>:bp<CR>
 
 " navigate windows with meta+arrows
 map <M-Right> <c-w>l
@@ -179,10 +191,10 @@ imap <M-Left> <ESC><c-w>h
 imap <M-Up> <ESC><c-w>k
 imap <M-Down> <ESC><c-w>j
 
-noremap <C-L> <c-w>l
-noremap <C-H> <c-w>h
-noremap <C-K> <c-w>k
-noremap <C-J> <c-w>j
+map <C-l> <c-w>l
+map <C-h> <c-w>h
+map <C-k> <c-w>k
+map <C-j> <c-w>j
 
 " automatically close autocompletion window
 autocmd CursorMovedI * if pumvisible() == 0|pclose|endif
@@ -273,7 +285,7 @@ let g:ctrlp_custom_ignore = {
   \ }
 
 " Ignore files on NERDTree
-let NERDTreeIgnore = ['\.pyc$', '\.pyo$', '\.o', '\.a', '\.la', '\.lo']
+let NERDTreeIgnore = ['\.pyc$', '\.pyo$', '\.o$', '\.a$', '\.la$', '\.lo$']
 
 " simple recursive grep
 command! -nargs=1 RecurGrep lvimgrep /<args>/gj ./**/*.* | lopen | set nowrap
@@ -338,6 +350,8 @@ let g:AutoClosePumvisible = {"ENTER": "\<C-Y>", "ESC": "\<ESC>"}
 " to use fancy symbols for powerline, uncomment the following line and use a
 " patched font (more info on the README.rst)
 "let g:Powerline_symbols = 'fancy'
+
+" vim-airline settings
 let g:airline_powerline_fonts = 1
 let g:airline_enable_branch = 1
 
@@ -353,6 +367,12 @@ let g:airline_symbols.branch = '⭠'
 let g:airline_symbols.readonly = '⭤'
 let g:airline_symbols.linenr = '⭡'
 
+let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#tabline#left_sep = '⮀'
+let g:airline#extensions#tabline#left_alt_sep = '⮁'
+let g:airline#extensions#tabline#right_sep = '⮂'
+let g:airline#extensions#tabline#right_alt_sep = '⮃'
+
 " 设置新文件的编码为 UTF-8
 set fileencoding=utf-8
 "
@@ -365,8 +385,8 @@ set fileencodings=ucs-bom,utf-8,gb18030,default
 "nnoremap <silent> <S-F12> :bp<CR>
 
 " Buffers navigation
-noremap <C-Tab>   :MBEbn<CR>
-noremap <C-S-Tab> :MBEbp<CR>
+noremap <C-Tab>   :bn<CR>
+noremap <C-S-Tab> :bp<CR>
 
 " Buffers quick search
 set wildchar=<Tab> wildmenu wildmode=full
@@ -379,13 +399,13 @@ if has("autocmd")
     au VimLeave * silent execute "!gconftool-2 --type string --set /apps/gnome-terminal/profiles/Default/cursor_shape block"
 endif
 " CTags update
-map <C-F12> :!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q .<CR>
-imap <C-F12> <ESC>:!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q .<CR>
+map <C-F12> :!ctags -R --c++-kinds=+p --fields=+liaS --extra=+q .<CR>
+imap <C-F12> <ESC>:!ctags -R --c++-kinds=+p --fields=+liaS --extra=+q .<CR>
 set tags+=~/.vim/systags
 
 " Mousable
 if has('mouse')
-    set mouse=a
+    set mouse=n
 endif
 
 " Set indentLine
@@ -407,3 +427,56 @@ let g:session_autosave = 'no'
 
 " minibufexpl
 nnoremap <silent> <F12> :MBEToggle<CR>
+
+" TagHighlight
+let g:TagHighlightSettings = {'TagFileName': 'tags', 'CtagsExecutable': 'ctags'}
+
+nmap - <Plug>(choosewin)
+let g:choosewin_overlay_enable = 1
+
+" Shortcuts for save
+" <LEADER>w : save
+" <LEADER>w : save and quit
+nnoremap <LEADER>w :w<CR>
+inoremap <LEADER>w <ESC>:w<CR> i
+nnoremap <LEADER>wq :wq<CR>
+inoremap <LEADER>wq <ESC>:wq<CR>
+
+"youcompleteme  默认tab  s-tab 和自动补全冲突
+let g:ycm_key_list_select_completion=['<c-n>']
+"let g:ycm_key_list_select_completion = ['<Down>']
+let g:ycm_key_list_previous_completion=['<c-p>']
+let g:ycm_key_list_previous_completion = ['<Up>']
+let g:ycm_complete_in_comments = 1  "在注释输入中也能补全
+let g:ycm_complete_in_strings = 1   "在字符串输入中也能补全
+let g:ycm_collect_identifiers_from_comments_and_strings = 1
+"注释和字符串中的文字也会被收入补全
+let g:ycm_seed_identifiers_with_syntax=1   "语言关键字补全,
+"不过python关键字都很短，所以，需要的自己打开
+let g:ycm_collect_identifiers_from_tags_files = 1
+" 引入，可以补全系统，以及python的第三方包 针对新老版本YCM做了兼容
+"old version
+if !empty(glob("~/.vim/bundle/YouCompleteMe/cpp/ycm/.ycm_extra_conf.py"))
+    let g:ycm_global_ycm_extra_conf = "~/.vim/bundle/YouCompleteMe/cpp/ycm/.ycm_extra_conf.py"
+endif
+" new version
+if !empty(glob("~/.vim/bundle/YouCompleteMe/third_party/ycmd/cpp/ycm/.ycm_extra_conf.py"))
+    let g:ycm_global_ycm_extra_conf = "~/.vim/bundle/YouCompleteMe/third_party/ycmd/cpp/ycm/.ycm_extra_conf.py"
+endif
+
+" Do not ask for ycm_extra_conf load
+let g:ycm_confirm_extra_conf = 0
+" 直接触发自动补全
+let g:ycm_key_invoke_completion = '<C-Space>'
+" 黑名单,不启用
+ let g:ycm_filetype_blacklist = {
+       \ 'tagbar' : 1,
+       \ 'gitcommit' : 1,
+       \}
+nnoremap <leader>jd :YcmCompleter GoToDefinitionElseDeclaration<CR>
+let g:ycm_filepath_completion_use_working_dir = 1
+let g:syntastic_always_populate_loc_list = 1
+
+" Close c.vim's C-J map
+let g:C_Ctrl_j = 'off'
+
