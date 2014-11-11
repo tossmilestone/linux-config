@@ -399,9 +399,12 @@ if has("autocmd")
     au VimLeave * silent execute "!gconftool-2 --type string --set /apps/gnome-terminal/profiles/Default/cursor_shape block"
 endif
 " CTags update
-map <C-F12> :!ctags -R --c++-kinds=+p --fields=+liaS --extra=+q .<CR>
-imap <C-F12> <ESC>:!ctags -R --c++-kinds=+p --fields=+liaS --extra=+q .<CR>
+noremap <silent> <F12> :!ctags -R --c++-kinds=+p --fields=+liaS --extra=+q .<CR>
+" imap <silent> <F12> <ESC>:!ctags -R --c++-kinds=+p --fields=+liaS --extra=+q .<CR>
 set tags+=~/.vim/systags
+
+" YouCompleteMe TypesFile Update
+noremap <silent> <F10> :UpdateTypesFile<CR>
 
 " Mousable
 if has('mouse')
@@ -425,9 +428,6 @@ xnoremap p pgvy
 " Session
 let g:session_autosave = 'no'
 
-" minibufexpl
-nnoremap <silent> <F12> :MBEToggle<CR>
-
 " TagHighlight
 let g:TagHighlightSettings = {'TagFileName': 'tags', 'CtagsExecutable': 'ctags'}
 
@@ -444,9 +444,7 @@ inoremap <LEADER>wq <ESC>:wq<CR>
 
 "youcompleteme  默认tab  s-tab 和自动补全冲突
 let g:ycm_key_list_select_completion=['<c-n>']
-"let g:ycm_key_list_select_completion = ['<Down>']
 let g:ycm_key_list_previous_completion=['<c-p>']
-let g:ycm_key_list_previous_completion = ['<Up>']
 let g:ycm_complete_in_comments = 1  "在注释输入中也能补全
 let g:ycm_complete_in_strings = 1   "在字符串输入中也能补全
 let g:ycm_collect_identifiers_from_comments_and_strings = 1
@@ -480,3 +478,29 @@ let g:syntastic_always_populate_loc_list = 1
 " Close c.vim's C-J map
 let g:C_Ctrl_j = 'off'
 
+"Use arrow key to change buffer"
+nnoremap [b :bprevious<cr>
+nnoremap ]b :bnext<cr>
+noremap <left> :bp<CR>
+noremap <right> :bn<CR>
+
+" F4 to temprarily disable highlight search
+noremap <silent> <F4> :nohlsearch<CR>
+
+" F8 to search the selected text
+set guioptions+=a
+function! MakePattern(text)
+  let pat = escape(a:text, '\')
+  let pat = substitute(pat, '\_s\+$', '\\s\\*', '')
+  let pat = substitute(pat, '^\_s\+', '\\s\\*', '')
+  let pat = substitute(pat, '\_s\+',  '\\_s\\+', 'g')
+  return '\\V' . escape(pat, '\"')
+endfunction
+vnoremap <silent> <F8> :<C-U>let @/="<C-R>=MakePattern(@*)<CR>"<CR>:set hls<CR>
+
+" F5, F6 to navigate in location list
+noremap <silent> <F6> :lprevious<CR>
+noremap <silent> <F7> :lnext<CR>
+
+" Copy to system pastepad
+noremap <LEADER>y "+y
