@@ -1,4 +1,4 @@
-vim-config
+Linux-config
 ==========
 
-My VIM config file
+My linux config files, such as .bashrc, .vimrc, etc.
