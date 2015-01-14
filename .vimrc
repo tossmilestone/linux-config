@@ -481,8 +481,6 @@ let g:C_Ctrl_j = 'off'
 "Use arrow key to change buffer"
 nnoremap [b :bprevious<cr>
 nnoremap ]b :bnext<cr>
-noremap <left> :bp<CR>
-noremap <right> :bn<CR>
 
 " F4 to temprarily disable highlight search
 noremap <silent> <F4> :nohlsearch<CR>
@@ -504,3 +502,8 @@ noremap <silent> <F7> :lnext<CR>
 
 " Copy to system pastepad
 noremap <LEADER>y "+y
+
+" Highlight text over 80 width coloumn
+set cc=100
+highlight ColorColumn ctermbg=217 ctermfg=8 guibg=#592929
+
