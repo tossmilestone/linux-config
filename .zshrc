@@ -11,7 +11,7 @@ fi
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 export GOPATH=$HOME/go
 PYTHON_BIN=$HOME/Library/Python/3.7/bin
-export PATH=$PYTHON_BIN:$HOME/bin/apiserver/bin:/usr/local/opt/coreutils/libexec/gnubin:/Users/shawho/istio-0.7.1/bin:/usr/local/opt/postgresql@9.6/bin:$HOME/bin:$GOPATH/bin:$PATH:
+export PATH=$PYTHON_BIN:$HOME/bin/apiserver/bin:/usr/local/opt/coreutils/libexec/gnubin:$HOME/istio-0.7.1/bin:/usr/local/opt/postgresql@9.6/bin:$HOME/bin:$GOPATH/bin:$PATH:
 
 if type brew &>/dev/null; then
 	  FPATH=$(brew --prefix)/share/zsh/site-functions:$FPATH
@@ -28,7 +28,7 @@ fi
 ZSH_TMUX_AUTOQUIT=false
 
 # Path to your oh-my-zsh installation.
-export ZSH=/Users/shawho/.oh-my-zsh
+export ZSH=$HOME/.oh-my-zsh
 
 # Set name of the theme to load. Optionally, if you set this to "random"
 # it'll load a random theme each time that oh-my-zsh is loaded.
@@ -219,7 +219,7 @@ zinit light trapd00r/LS_COLORS
 
 zstyle ':bracketed-paste-magic' active-widgets '.self-*'
 
-export PATH="/Users/shawho/Library/Python/2.7/bin:$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH:/usr/local/kubebuilder/bin"
+export PATH="$HOME/Library/Python/2.7/bin:$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH:/usr/local/kubebuilder/bin"
 export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$(go env GOROOT)/misc/wasm:$PATH"
 #source ~/.minikube-completion
 alias kcalico="kubectl --context=calico"
